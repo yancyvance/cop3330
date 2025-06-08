@@ -27,7 +27,7 @@ public class MyDate {
 
     // class variables (shared); also made them constants
     /** Names of the months in order */
-    private static final String[] names = {
+    private static final String[] monthNames = {
         "January", "February", "March", "April", "May", "June", 
         "July", "August", "September", "October", "November", "December"
     };
@@ -78,16 +78,17 @@ public class MyDate {
             m = 1;
         month = m;
     }
-    
+
     /**
      * Sets the day. Values outside valid range for the current month and year
      * will default to 1.
      * 
      * @param d the day to set
      */
-    public void setDay(int d) {
-        int tmp = getMaxDays(year, month);
-        if(d < 1 || d > tmp)
+    public void setDay(int d) {        
+        int tmp = getMaxDays(month, year);
+        
+        if(d < 0 || d > tmp)
             d = 1;
         day = d;
     }
@@ -101,6 +102,26 @@ public class MyDate {
         if(y < 0)
             y = 0;
         year = y;
+    } 
+    
+    /**
+     * Returns a string representation of the date in the format
+     * "MonthName day, year".
+     * 
+     * @return the string form of the date
+     */
+    public String toString() {
+        //return month + " " + day + ", " + year;
+        return getMonthName() + " " + day + ", " + year;
+    }
+    
+    /**
+     * Returns the full name of the month.
+     * 
+     * @return the name of the current month
+     */
+    public String getMonthName() {
+        return monthNames[month-1];
     }
     
     /**
@@ -110,20 +131,22 @@ public class MyDate {
      */
     public MyDate duplicate() {
         // deep copy of the current object
-        MyDate tmp = new MyDate(month, day, year);
+        MyDate newDate = new MyDate(month, day, year);
         
-        return tmp;
+        return newDate;
     }
     
     /**
-     * Advances this date by one day, modifying the current object.
+     * Returns a new {@code MyDate} that is one day after this date.
+     * 
+     * @return a new {@code MyDate} for the next day
      */
-    public void goToNextDay() {
-        MyDate newDate = getNextDay();
+    public MyDate getNextDay() {
+        MyDate newDate = duplicate();
         
-        month = newDate.month;
-        day = newDate.day;
-        year = newDate.year;
+        newDate.goToNextDay();
+        
+        return newDate;
     }
     
     /**
@@ -140,31 +163,23 @@ public class MyDate {
     }
     
     /**
-     * Returns a new {@code MyDate} that is one day after this date.
-     * 
-     * @return a new {@code MyDate} for the next day
+     * Advances this date by one day, modifying the current object.
      */
-    public MyDate getNextDay() {
-        MyDate newDate = duplicate();
+    public void goToNextDay() {
+        day = day + 1;
         
-        newDate.day = newDate.day + 1;
-        
-        // check if beyond
-        if(newDate.day > getMaxDays(newDate.year, newDate.month)) {
-            // reset day to 1
-            newDate.day = 1;
-            // then increment the month
-            newDate.month = newDate.month + 1;
+        if( day > getMaxDays(month, year) ) {
+            day = 1;
             
-            if(newDate.month > 12) {
-                // reset month to 1
-                newDate.month = 1;
-                // then increment year
-                newDate.year = newDate.year + 1;
+            month = month + 1;
+            
+            if( month > 12 ) {
+                month = 1;
+                
+                year = year + 1;
+                
             }
         }
-        
-        return newDate;
     }
     
     /**
@@ -174,7 +189,7 @@ public class MyDate {
      * @return {@code true} if the dates are equal; {@code false} otherwise
      */
     public boolean equals(MyDate other) {
-        return month == other.month && day == other.day && year == other.year;
+        return this.month == other.month && day == other.day && year == other.year;
     }
     
     /**
@@ -194,25 +209,42 @@ public class MyDate {
         // if diff < 0, then the current date comes before the other date
         // if diff > 0, then the current date comes after the other date
         return diff;
-    }    
+    } 
     
     /**
-     * Returns a string representation of the date in the format
-     * "MonthName day, year".
+     * Determines whether the specified year is a leap year.
      * 
-     * @return the string form of the date
+     * @param y the year
+     * @return {@code true} if the year is a leap year; {@code false} otherwise
      */
-    public String toString() {
-        return getMonthName() + " " + day + ", " + year;
+    public static boolean isLeapYear(int y) {
+        return ( (y % 400 == 0) || (y % 4 == 0 && y % 100 != 0) );
     }
     
     /**
-     * Returns the full name of the month.
+     * Calculates the number of days from January 1, year 0 to the given date.
      * 
-     * @return the name of the current month
+     * @param date the date to compute the day count for
+     * @return the total number of days since year 0
      */
-    public String getMonthName() {
-        return names[month-1];
+    public static int getDaysSinceStart(MyDate date) {
+        // helper method, so made it static
+        int numDays = 0;
+      
+        for(int i = 1; i < date.year; i++) {
+            numDays = numDays + 365;
+            
+            if( isLeapYear(date.year) )
+                numDays++;
+        }
+        
+        for(int i = 1; i < date.month; i++) {
+            numDays = numDays + getMaxDays(date.month, date.year);
+        }
+        
+        numDays = numDays + date.day;
+        
+        return numDays;
     }
     
     /**
@@ -228,59 +260,12 @@ public class MyDate {
         // 28 or 29 - 2
         // 30 - 4; 6; 9; 11
         // 31 - otherwise
+        int tmp = maxDays[m-1];
+        
         if(m == 2)
-            // check if it is a leap year
             if( isLeapYear(y) )
-                return maxDays[m-1] + 1;
+                tmp = tmp + 1;
                 
-        return maxDays[m-1];
+        return tmp;
     }
-    
-    /**
-     * Determines whether the specified year is a leap year.
-     * 
-     * @param y the year
-     * @return {@code true} if the year is a leap year; {@code false} otherwise
-     */
-    public static boolean isLeapYear(int y) {
-        // helper method, so made it static
-        return ( (y % 400 == 0) || (y % 4 == 0 && y % 100 != 0) );
-        /*
-        if(y % 400 == 0)
-            return true;
-        
-        if(y % 4 == 0 && y % 100 != 0)
-            return true;
-            
-        return false;
-        */
-    }
-    
-    /**
-     * Calculates the number of days from January 1, year 0 to the given date.
-     * 
-     * @param date the date to compute the day count for
-     * @return the total number of days since year 0
-     */
-    public static int getDaysSinceStart(MyDate date) {
-        // helper method, so made it static
-        int numDays = 0;
-        
-        for(int i = 1; i < date.year; i++) {
-            // check if leap year
-            if(isLeapYear(i))
-                numDays = numDays + 366;
-            else
-                numDays = numDays + 365;
-        }
-        
-        for(int i = 1; i < date.month; i++) {
-            numDays = numDays + getMaxDays(date.year, i);
-        }
-        
-        numDays = numDays + date.day;
-        
-        return numDays;
-    }
-    
 }
