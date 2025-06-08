@@ -27,7 +27,7 @@ public class MyDate {
 
     // class variables (shared); also made them constants
     /** Names of the months in order */
-    private static final String[] names = {
+    private static final String[] monthNames = {
         "January", "February", "March", "April", "May", "June", 
         "July", "August", "September", "October", "November", "December"
     };
@@ -212,7 +212,7 @@ public class MyDate {
      * @return the name of the current month
      */
     public String getMonthName() {
-        return names[month-1];
+        return monthNames[month-1];
     }
     
     /**
