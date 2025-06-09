@@ -19,53 +19,54 @@ public class Fraction {
     // setters
     public void setNumerator(int n) {
         this.numerator = n;
+        //simplify();
     }
     
     public void setDenominator(int d) {
         if(d == 0)
             d = 1;
         this.denominator = d;
+        //simplify();
     }
     
     // getters
     public int getNumerator() {
-        
-        return 0;
+        //simplify();
+        return this.numerator;
     }
     
     public int getDenominator() {
-        return 0;
+        //simplify();
+        return this.denominator;
     }
     
     public String toString() {
-        //return this.numerator + "/" + this.denominator;
-        return String.format("%d/%d", this.numerator, this.denominator);
+        //return getNumerator() + "/" + getDenominator();
+        return String.format("%d/%d", getNumerator(), getDenominator());
     }
     
     public static int findGCD(int a, int b) {
         if(a == 0)
             return b;
-        
+            
         return findGCD(b % a, a);
     }
     
     public Fraction add(Fraction other) {
+        //return null;
         //Fraction result = new Fraction();
         
-        int resNum = this.numerator*other.denominator + this.denominator*other.numerator;
-        int resDen = this.denominator*other.denominator;
+        int numThis = this.numerator;
+        int denThis = this.denominator;
         
-        Fraction result = new Fraction(resNum, resDen);
-        //result.simplify();
+        int numOther = other.numerator;
+        int denOther = other.denominator;
         
-        return result;        
-    }
-    
-    public Fraction multiply(Fraction other) {
-        int resNum = this.numerator * other.numerator;
-        int resDen = this.denominator * other.denominator;
+        int newDen = denThis * denOther;
+        //int newNum = (newDen/denThis*numThis) + (newDen/denOther*numOther) ;
+        int newNum = (denOther*numThis) + (denThis*numOther) ;
         
-        return new Fraction(resNum, resDen);
+        return new Fraction(newNum, newDen);
     }
     
     public void simplify() {
@@ -76,31 +77,21 @@ public class Fraction {
         
         this.numerator = newNum;
         this.denominator = newDen;
-        
+        //setNumerator(newNum);
+        //setDenominator(newDen);
     }
     
     public Fraction duplicate() {
-        return new Fraction(this.numerator, this.denominator);
+        return null;
     }
     
     public boolean equals(Fraction other) {
-        return this.numerator*other.denominator == this.denominator*other.numerator;
+        return false;
     }
     
     public int compareTo(Fraction other) {
+        
         return 0;
     }
     
-    public Fraction getInverse() {
-        // potential issue: 0/1 becomes 0/1
-        // so, if that happens, we correct it to become 1/1
-        //Fraction invFr = new Fraction(this.denominator, this.numerator);
-        return new Fraction(this.denominator, this.numerator);
-        
-        //return invFr;
-    }
-    
-    public double toDecimal() {
-        return (double) this.numerator / this.denominator;
-    }
 }
