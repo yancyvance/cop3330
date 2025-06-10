@@ -244,14 +244,29 @@ public class Fraction implements Comparable<Fraction> {
      * and a value greater than 0 if this fraction is greater than the fraction argument
      */
     public int compareTo(Fraction other) {
-        // -1 if this is < other
-        // +1 if this is > other 
+        // < 0 if this is < other
+        // > 0 if this is > other 
         // 0 if this == other
+        /*
+        // approach 1
         int left = other.denominator * this.numerator;
         int right = this.denominator * other.numerator;
         
         if(left < right) return -1;
         else if(left > right) return 1;
+        return 0;
+        */
+    
+        // approach 2, using subtraction
+        Fraction result = this.subtract(other);
+        int resNum = result.getNumerator();
+        
+        // the return value is based on the sign
+        // of the numerator
+        if(resNum < 0)
+            return -1;
+        else if(resNum > 0)
+            return 1;
         return 0;
     }
     
@@ -285,13 +300,23 @@ public class Fraction implements Comparable<Fraction> {
     }
     
     /**
-     * Computes the greatest common divisor (GCD) of two integers using the Euclidean algorithm.
+     * Computes the greatest common divisor (GCD) of two integers using the
+     * Euclidean algorithm. This method always returns a non-negative result.
+     * <p>
+     * If either or both input integers are negative, their absolute values
+     * are used in the computation. The GCD of 0 and any non-zero integer is
+     * the absolute value of the non-zero integer. The GCD of 0 and 0 is defined
+     * here as 0.
      *
-     * @param a first number
-     * @param b second number
-     * @return the GCD of a and b
+     * @param a the first integer (can be negative)
+     * @param b the second integer (can be negative)
+     * @return the greatest common divisor of {@code a} and {@code b}, always non-negative
      */
     public static int findGCD(int a, int b) {
+        // get absolute values first
+        a = Math.abs(a);
+        b = Math.abs(b);
+    
         if(a == 0)
             return b;
         
