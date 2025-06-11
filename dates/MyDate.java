@@ -234,12 +234,18 @@ public class MyDate {
         for(int i = 1; i < date.year; i++) {
             numDays = numDays + 365;
             
-            if( isLeapYear(date.year) )
+            // Bug Fix 6/11/2025: Logic error where the first
+            // parameter to getMaxDays() is changed to i
+            // instead of date.year
+            if( isLeapYear(i) )
                 numDays++;
         }
         
         for(int i = 1; i < date.month; i++) {
-            numDays = numDays + getMaxDays(date.month, date.year);
+            // Bug Fix 6/11/2025: Logic error where the first
+            // parameter to getMaxDays() is changed to i
+            // instead of date.month
+            numDays = numDays + getMaxDays(i, date.year);
         }
         
         numDays = numDays + date.day;
