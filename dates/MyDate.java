@@ -261,7 +261,7 @@ public class MyDate {
      * @param m the month
      * @return the maximum number of days in that month
      */
-    public static int getMaxDays(int y, int m) {
+    public static int getMaxDays(int m, int y) {
         // helper method, so made it static
         // 28 or 29 - 2
         // 30 - 4; 6; 9; 11
