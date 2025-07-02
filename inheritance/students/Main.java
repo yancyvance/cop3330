@@ -1,31 +1,61 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class Main {
     
-    public static void main(String[] args) throws FileNotFoundException {
-        GraduateStudent gs = new GraduateStudent("John Doe");
-        
-        //System.out.println( gs.getName() );
-        
-        
-        gs.addCourse( new Course("COP3330", "Object-Oriented Programming", 3) );
-        gs.addCourse( new Course("COP3502", "Computer Science I", 3) );
-        //gs.name = "Jane";
-        gs.introduce();
-        
-        System.out.println( gs.getTotalCredit() );
-        //gs.m2();
-        /*
+    public static void main(String[] args) throws FileNotFoundException {                
         //Scanner input = new Scanner(System.in);   // standard input
-        Scanner input = new Scanner( new File("input.txt") );   // from file
+        Scanner input = new Scanner( new File("input_updated.txt") );   // from file
         
+        // create the two lists
+        ArrayList<GraduateStudent> gradStudents = new ArrayList<>();
+        ArrayList<UndergraduateStudent> undergradStudents = new ArrayList<>();
+        
+        // temporary variables
+        GraduateStudent gs = null;
+        UndergraduateStudent ugs = null;
+        boolean isGrad;
+            
         int T = input.nextInt();
         input.nextLine();
         
-        for(int i = 0; i < T; i++) {
+        for(int i = 0; i < T; i++) {            
             String name = input.nextLine();
+            
+            // read the student type
+            String type = input.next();
+            
+            // check
+            if( type.equals("Graduate") ) {
+                // create an object
+                gs = new GraduateStudent(name);
+                
+                // get the thesis topic
+                String topic = input.nextLine();
+                gs.setThesisTopic(topic);
+                
+                // add to the list
+                gradStudents.add( gs );
+                
+                // set flag to true
+                isGrad = true;
+            }
+            else {
+                // create an object
+                ugs = new UndergraduateStudent(name);
+                
+                // get the year level
+                int yearLevel = input.nextInt();
+                ugs.setYearLevel(yearLevel);
+                
+                // add to the list
+                undergradStudents.add(ugs);
+                
+                // set flag to false
+                isGrad = false;
+            }
             
             int C = input.nextInt();
             input.nextLine();
@@ -35,52 +65,34 @@ public class Main {
                 int credit = input.nextInt();
                 String title = input.nextLine().trim();
                 
-                System.out.println(code + " " + credit + " " + title);
+                // create a course object
+                Course c = new Course(code, title, credit);
+                
+                // add this course to the appropriate student
+                // based on the flag
+                if(isGrad)
+                    gs.addCourse(c);
+                else
+                    ugs.addCourse(c);
+                
+                //System.out.println(code + " " + credit + " " + title);
             }
         }
         
+        // close the input file
         input.close();
-        */
-        
-        /*
-        Student s = new Student("John Doe");
-        
-        s.addCourse( new Course("COP3330", "Object-Oriented Programming", 3) );
-        s.addCourse( new Course("COP3502", "Computer Science I", 3) );
-        
-        s.introduce();
-        
-        //Student t = s;
-        Student t = s.duplicate();
-        
-        t.introduce();
-        t.courses.remove(0);
-        
-        t.introduce();
-        
-        s.introduce();
         
         
-        Course c = new Course("COP3223", "Intro to Programming", 3);
+        // display all the graduate students
+        for( GraduateStudent s : gradStudents ) {
+            s.introduce();
+        }
         
-        System.out.println(c);
-        
-        Student u = new Student("Super Mario");
-        
-        u.addCourse(c);
-        
-        u.introduce();
-        
-        s.addCourse(c);
-        
-        s.introduce();
-        
-        c.setCode("123");
-        
-        u.introduce();
-        
-        s.introduce();
-        */
+        // display all the undergraduate students
+        for( UndergraduateStudent s : undergradStudents ) {
+            s.introduce();
+        }
+
     }
     
 }
