@@ -1,60 +1,70 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 
 public class Main {
     
-    public static void main(String[] args) throws FileNotFoundException {                
+    public static void main(String[] args) throws FileNotFoundException {       
+        // container of all students
+        //GraduateStudent[] gStudents;
+        //UndergraduateStudent[] uStudents;
+        Student[] students;
+    
         //Scanner input = new Scanner(System.in);   // standard input
         Scanner input = new Scanner( new File("input_updated.txt") );   // from file
         
-        // create the two lists
-        ArrayList<GraduateStudent> gradStudents = new ArrayList<>();
-        ArrayList<UndergraduateStudent> undergradStudents = new ArrayList<>();
-        
-        // temporary variables
-        GraduateStudent gs = null;
-        UndergraduateStudent ugs = null;
-        boolean isGrad;
-            
         int T = input.nextInt();
         input.nextLine();
         
-        for(int i = 0; i < T; i++) {            
+        //gStudents = new GraduateStudent[T];
+        //uStudents = new UndergraduateStudent[T];
+        students = new Student[T];
+        
+        
+        /*
+        int gPtr = 0;
+        int uPtr = 0;
+        */
+        int ptr = 0;
+        
+        
+        for(int i = 0; i < T; i++) {
+            // not needed anymore
+            //boolean isGrad = false;
+            
             String name = input.nextLine();
             
             // read the student type
             String type = input.next();
             
-            // check
-            if( type.equals("Graduate") ) {
-                // create an object
-                gs = new GraduateStudent(name);
-                
+            // check what type of student
+            if( type.equals("Graduate") ) {                
                 // get the thesis topic
                 String topic = input.nextLine();
+                
+                // create a graduate student object
+                GraduateStudent gs = new GraduateStudent(name);
+                //isGrad = true;
+                
+                // set the thesis topic
                 gs.setThesisTopic(topic);
                 
-                // add to the list
-                gradStudents.add( gs );
-                
-                // set flag to true
-                isGrad = true;
+                //gStudents[gPtr++] = gs;
+                students[ptr++] = gs;
             }
             else {
-                // create an object
-                ugs = new UndergraduateStudent(name);
-                
                 // get the year level
                 int yearLevel = input.nextInt();
-                ugs.setYearLevel(yearLevel);
+
+                // create an undergraduate student object
+                UndergraduateStudent ugs = new UndergraduateStudent(name);
+                //isGrad = false;'
                 
-                // add to the list
-                undergradStudents.add(ugs);
+                // set the year level
+                ugs.setYearLevel( yearLevel );
                 
-                // set flag to false
-                isGrad = false;
+                //uStudents[uPtr++] = ugs;
+                students[ptr++] = ugs;
             }
             
             int C = input.nextInt();
@@ -66,33 +76,55 @@ public class Main {
                 String title = input.nextLine().trim();
                 
                 // create a course object
-                Course c = new Course(code, title, credit);
+                Course cTemp = new Course(code, title, credit);
                 
-                // add this course to the appropriate student
-                // based on the flag
-                if(isGrad)
-                    gs.addCourse(c);
-                else
-                    ugs.addCourse(c);
+                // no need for an if and else statement
+                students[ptr-1].addCourse( cTemp );
+                
+                /*
+                if(isGrad) {
+                    //gStudents[gPtr-1].addCourse( cTemp );
+                    students[ptr-1].addCourse( cTemp );
+                }
+                else {
+                    //uStudents[uPtr-1].addCourse( cTemp );
+                    students[ptr-1].addCourse( cTemp );
+                }
+                */
                 
                 //System.out.println(code + " " + credit + " " + title);
             }
         }
         
-        // close the input file
+        // close the file
         input.close();
         
-        
-        // display all the graduate students
-        for( GraduateStudent s : gradStudents ) {
-            s.introduce();
+        for( Student s : students ) {
+            //System.out.println(s);
+            if(s != null) {
+                s.introduce();
+                System.out.printf("%,.2f\n", s.getTuitionDue());
+            }
         }
         
-        // display all the undergraduate students
-        for( UndergraduateStudent s : undergradStudents ) {
-            s.introduce();
+        /*
+        for( GraduateStudent s : gStudents ) {
+            //System.out.println(s);
+            if(s != null) {
+                s.introduce();
+                System.out.printf("%,.2f\n", s.getTuitionDue());
+            }
         }
-
+        
+        for( UndergraduateStudent s : uStudents ) {
+            //System.out.println(s);
+            if(s != null) {
+                s.introduce();
+                System.out.printf("%,.2f\n", s.getTuitionDue());
+            }
+        }
+        */
+        
     }
     
 }

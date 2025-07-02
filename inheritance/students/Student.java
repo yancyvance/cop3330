@@ -3,7 +3,7 @@ import java.util.ArrayList;
 /**
  * The {@code Student} class represents a student with a name and a list of enrolled courses.
  */
-public class Student {
+public abstract class Student {
     
     /** The name of the student. */
     protected String name;
@@ -74,7 +74,7 @@ public class Student {
             System.out.printf("[%d] %s\n", i, tmp);
         }
         
-        System.out.println();
+        //System.out.println();
     }
     
     /**
@@ -82,6 +82,7 @@ public class Student {
      *
      * @return a new Student object that is a copy of this student
      */
+     /*
     public Student duplicate() {
         // create a student with same name
         Student newStud = new Student(this);
@@ -89,6 +90,7 @@ public class Student {
         //newStud.courses = this.courses;
         return newStud;
     }
+    */
     
     /**
      * Returns the name of the student.
@@ -126,5 +128,12 @@ public class Student {
         
         return total;
     }
+    
+    public double getTuitionDue() {
+        // demonstration of Template Method Pattern
+        return this.getTotalCredit() * getRate();
+    }
+    
+    public abstract double getRate();
     
 }
