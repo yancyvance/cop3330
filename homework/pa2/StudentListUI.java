@@ -23,6 +23,10 @@ import java.awt.event.ActionEvent;
  */
 public class StudentListUI {
     
+    /** The application title */
+    private static final String WINDOW_TITLE = "Student Information System";
+    
+    
     /** The controller used to fetch student and course data */
     private Controller controller;
     
@@ -56,11 +60,11 @@ public class StudentListUI {
         this.controller = controller;
     
         // create a frame for this view
-        this.frame = new JFrame("Student Information System");
+        this.frame = new JFrame(WINDOW_TITLE);
         
         // terminate the application on exit
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 200);
+        frame.setSize(950, 200);
         
         // populate the table with all data from the file
         populateTable(controller.getStudentListData());
@@ -93,7 +97,13 @@ public class StudentListUI {
         bottomPanel.add(btnReset);
         bottomPanel.add(btnRegistration);
         bottomPanel.add(btnDetails);
-        this.frame.add(bottomPanel, BorderLayout.SOUTH);
+        
+        // add panel to a ScrollPane to prevent from being hidden
+        JScrollPane bsp = new JScrollPane(bottomPanel,
+            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            
+        this.frame.add(bsp, BorderLayout.SOUTH);
         
         // center the window on the screen
         this.frame.setLocationRelativeTo(null);
@@ -158,7 +168,7 @@ public class StudentListUI {
      * @param e the action event triggered by the user
      */
     private void filterStudents(ActionEvent e) {
-        String key = JOptionPane.showInputDialog("Enter Search Query:");
+        String key = JOptionPane.showInputDialog(this.frame, "Enter Search Query:");
         
         if(key != null && !key.isEmpty()) {
             // remove the old one first
@@ -169,6 +179,9 @@ public class StudentListUI {
             // disable the filter button and enable the reset
             btnFilter.setEnabled(false);
             btnReset.setEnabled(true);
+            
+            // update the window title
+            this.frame.setTitle( String.format("%s | Filtered: %s", WINDOW_TITLE, key) );
         }
         else {
             JOptionPane.showMessageDialog(this.frame, "No search query was entered.");
@@ -191,6 +204,9 @@ public class StudentListUI {
         // enable the filter button and disable the reset
         btnFilter.setEnabled(true);
         btnReset.setEnabled(false);
+        
+        // update the window title
+        this.frame.setTitle( WINDOW_TITLE );
     }
     
     /**
