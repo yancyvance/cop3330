@@ -13,7 +13,7 @@
  * <p>This class implements the {@code Searchable} interface, allowing it to be used
  * in search and comparison operations within collections.
  */
-public class Course implements Searchable, Comparable<Course> {
+public class Course implements Comparable, Searchable {
     
     /** The unique course code. */
     private String code;
@@ -111,6 +111,42 @@ public class Course implements Searchable, Comparable<Course> {
     }
     
     /**
+     * Compares this Course object with the specified object for order.
+     * The comparison is primarily based on the number of credit hours.
+     * If the credit hours are equal, the comparison falls back to
+     * lexicographically comparing the course codes.
+     *
+     * @param obj the object to be compared, which is expected to be a Course.
+     * @return a negative integer, zero, or a positive integer as this Course
+     *         is less than, equal to, or greater than the specified Course.
+     *         - Returns the difference in credit hours if they differ.
+     *         - Returns the result of comparing course codes if credit hours are equal.
+     * @throws ClassCastException if the specified object is not a Course.
+     */
+    @Override
+    public int compareTo(Object obj) {
+        // explicit downcasting
+        Course o = (Course)obj;
+        
+        // check based on credit hours first
+        if( this.getCredit() == o.getCredit() ) {
+            // tied credit hours, break by course code
+            // so simply use the compareTo() definition of a
+            // string to determine which string is "lesser"
+            // than the other
+            return this.getCode().compareTo( o.getCode() );
+        }
+        else {
+            // there is no tie, so simply return a negative number
+            // if credit hour of this is less than the credit
+            // hour of obj, a positive number if credit hour of this
+            // is greater than the credit hour of obj, a 0
+            // if they are the same
+            return this.getCredit() - o.getCredit();
+        }
+    }
+    
+    /**
      * Determines if the course matches the given search key.
      * A match occurs if the key is found in either the course code or the title (case-insensitive).
      *
@@ -119,7 +155,10 @@ public class Course implements Searchable, Comparable<Course> {
      */
     @Override
     public boolean isMatch(String key) {
+        // make it not case-sensitive
         key = key.toLowerCase();
+        
+        // check if the key is contained either in the course code or the title
         return this.getCode().toLowerCase().contains(key) || this.getTitle().toLowerCase().contains(key);
     }
     
@@ -132,28 +171,12 @@ public class Course implements Searchable, Comparable<Course> {
      */
     @Override
     public boolean isEqual(Object obj) {
-        Course c = (Course)obj;
-        return this.getCode().equals( c.getCode() ) && this.getTitle().equals( c.getTitle() ) && this.getCredit() == c.getCredit();
-    }
-    
-    @Override
-    public int compareTo(Course obj) {
-        // check based on credit hours first
-        if( this.getCredit() == obj.getCredit() ) {
-            // tied credit hours, break by course code
-            // so simply use the compareTo() definition of a
-            // string to determine which string is "lesser"
-            // than the other
-            return this.getCode().compareTo( obj.getCode() );
-        }
-        else {
-            // there is no tie, so simply return a negative number
-            // if credit hour of this is less than the credit
-            // hour of obj, a positive number if credit hour of this
-            // is greater than the credit hour of obj, a 0
-            // if they are the same
-            return this.getCredit() - obj.getCredit();
-        }
+        // explicit downcasting
+        Course o = (Course)obj;
+        
+        // check if all the fields are exactly the same
+        // this includes both reference types and primitive type
+        return this.getCode().equals( o.getCode() ) && this.getTitle().equals( o.getTitle() ) && this.getCredit() == o.getCredit();
     }
     
 }

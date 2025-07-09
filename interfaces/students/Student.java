@@ -5,7 +5,7 @@ import java.util.ArrayList;
  * It is an abstract class that provides a foundation for different types of students (e.g., undergraduate, graduate).
  * Implements the {@code Searchable} interface to allow keyword-based matching and equality checks.
  */
-public abstract class Student implements Searchable, Comparable<Student> {
+public abstract class Student implements Comparable, Searchable {
     
     /** The name of the student. */
     protected String name;
@@ -187,6 +187,40 @@ public abstract class Student implements Searchable, Comparable<Student> {
     public abstract String getStatus();
     
     /**
+     * Compares this Student object with the specified object for order.
+     * The comparison is primarily based on the student's status (e.g., undergraduate, graduate).
+     * If the statuses are equal, the comparison falls back to lexicographically comparing
+     * the students' names.
+     *
+     * @param obj the object to be compared, which is expected to be a Student.
+     * @return a negative integer, zero, or a positive integer as this Student
+     *         is less than, equal to, or greater than the specified Student.
+     *         - Returns the result of comparing statuses if they differ.
+     *         - Returns the result of comparing names if statuses are equal.
+     * @throws ClassCastException if the specified object is not a Student.
+     */
+    @Override
+    public int compareTo(Object obj) {
+        // explicit downcasting
+        Student o = (Student)obj;
+        
+        // check based on their student type (or status)
+        if( this.getStatus().equals( o.getStatus() ) ) {
+            // tied student type, break by their name
+            // so simply use the compareTo() definition of a
+            // string to determine which string is "lesser"
+            // than the other
+            return this.getName().compareTo( o.getName() );
+        }
+        else {
+            // there is no tie, because the status is a
+            // string value, simply use the compareTo()
+            // method as well
+            return this.getStatus().compareTo( o.getStatus() );
+        }
+    }
+    
+    /**
      * Determines if the student's name contains the given search key (case-insensitive).
      *
      * @param key the string to search for
@@ -194,7 +228,10 @@ public abstract class Student implements Searchable, Comparable<Student> {
      */
     @Override
     public boolean isMatch(String key) {
+        // make it not case-sensitive
         key = key.toLowerCase();
+        
+        // check if the key is contained in the name
         return this.getName().toLowerCase().contains(key);
     }
     
@@ -206,7 +243,12 @@ public abstract class Student implements Searchable, Comparable<Student> {
      */
     @Override
     public boolean isEqual(Object obj) {
-        return this.getName().equals( ((Student)obj).getName() );
+        // explicit downcasting
+        Student o = (Student)obj;
+        
+        // check only if they have the same name
+        // for now, ignore the list of courses
+        return this.getName().equals( o.getName() );
     }
     
     /**
@@ -218,28 +260,10 @@ public abstract class Student implements Searchable, Comparable<Student> {
     public CourseList getCourseList() {
         CourseList list = new CourseList();
         
-        for(Course c : courses)
+        for(Course c : this.courses)
             list.add(c);
             
         return list;
-    }
-    
-    @Override
-    public int compareTo(Student obj) {
-        // check based on their student type (or status)
-        if( this.getStatus().equals( obj.getStatus() ) ) {
-            // tied student type, break by their name
-            // so simply use the compareTo() definition of a
-            // string to determine which string is "lesser"
-            // than the other
-            return this.getName().compareTo( obj.getName() );
-        }
-        else {
-            // there is no tie, because the status is a
-            // string value, simply use the compareTo()
-            // method as well
-            return this.getStatus().compareTo( obj.getStatus() );
-        }
     }
     
 }

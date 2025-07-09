@@ -110,9 +110,42 @@ public class GraduateStudent extends Student {
      */
     @Override
     public GraduateStudent duplicate() {
+        // call the copy constructor
         GraduateStudent s = new GraduateStudent(this);
         
         return s;
+    }
+    
+    /**
+     * Determines whether this GraduateStudent is equal to the specified object.
+     * The comparison is performed in two stages:
+     * <ol>
+     *   <li>First, it delegates to the superclass's {@code isEqual} method to compare
+     *       all inherited fields.</li>
+     *   <li>If the superclass fields are equal, it then compares the {@code thesisTopic}
+     *       specific to GraduateStudent.</li>
+     * </ol>
+     *
+     * @param obj the object to be compared, which is expected to be a GraduateStudent.
+     * @return {@code true} if both the inherited and GraduateStudent-specific fields are equal;
+     *         {@code false} otherwise.
+     * @throws ClassCastException if the specified object is not a GraduateStudent.
+     */
+    @Override
+    public boolean isEqual(Object obj) {
+        // call the parent's version first if
+        // all the fields of the parents are the same
+        // then, compare the fields of the child class
+        if( super.isEqual(obj) ) {
+            // explicit downcasting
+            GraduateStudent o = (GraduateStudent)obj;
+            
+            // fields of graduate
+            return this.getThesisTopic().equals( o.getThesisTopic() );
+        }
+        
+        // didn't meet the criteria of the parent
+        return false;
     }
     
 }
