@@ -2,12 +2,16 @@
 
 This version introduces a new abstract class, `BaseList`, which acts as a generic container for storing multiple objects. Unlike the version used in the homework, this `BaseList` also supports sorting its elements.
 
-In addition, the following files obtained from the polymorphism version were updated:
-- `Course.java`: We defined the criteria to use when comparing two Course objects.
-- `Student.java`: We defined the comparison criteria applicable to any object that is an instance of a Student subclass.
+## What's New
+The following files obtained from the polymorphism version were updated:
+- `Course.java`: We defined the criteria to use when comparing two Course objects. We also implemented the Searchable interface.
+- `Student.java`: We defined the comparison criteria applicable to any object that is an instance of a Student subclass. We also implemented the Searchable interface.
+- `GraduateStudent.java`: We extended the definition of isEqual() inherited from Student to account for the thesis topic.
+- `UndergraduateStudent.java`: We extended the definition of isEqual() inherited from Student to account for the year level.
 
+## Project Structure
 To test the application, we started organizing our code into the following:
-- `UI.java`: A simple user interface that will display on the screen the contents of a list.
+- `UI.java`: A generic text-based user interface that will display on the screen the contents of a `BaseList` list.
 - `SimpleController.java`: The main controller of the project, which prepares the data used by the UI.
 - `MainApp.java`: The entry point of the project.
 
