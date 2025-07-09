@@ -1,7 +1,8 @@
 # Interface
 
-This version updated the following classes obtained from the polymorphism version:
-- `BaseList.java`: The list is now capable of sorting the elements stored inside it.
+This version introduces a new abstract class, `BaseList`, which acts as a generic container for storing multiple objects. Unlike the version used in the homework, this `BaseList` also supports sorting its elements.
+
+In addition, the following files obtained from the polymorphism version were updated:
 - `Course.java`: We defined the criteria to use when comparing two Course objects.
 - `Student.java`: We defined the comparison criteria applicable to any object that is an instance of a Student subclass.
 
@@ -11,6 +12,4 @@ To test the application, we started organizing our code into the following:
 - `MainApp.java`: The entry point of the project.
 
 ## Compiling the Project
-The `.class` files indicate that these files were not modified, but they are necessary for the project to compile. You can simply copy and paste them into the same directory to compile the project. Alternatively, if needed, you can retrieve the corresponding `.java` files from a previous version.
-
-**Note:** The files `CourseList.class` and `StudentList.class` are intentionally not included. Can you think about why that might be?
+The files `CourseList.java` and `StudentList.java` are intentionally not included. Can you think about why that might be?
