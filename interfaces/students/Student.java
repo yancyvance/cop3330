@@ -99,6 +99,15 @@ public abstract class Student implements Searchable, Comparable<Student> {
     */
     
     /**
+     * Creates and returns a duplicate of the student.
+     * This method must be implemented by subclasses to return
+     * a new instance that is a copy of the current student.
+     *
+     * @return a copy of the student
+     */
+     public abstract Student duplicate();
+    
+    /**
      * Returns the name of the student.
      *
      * @return the name of the student
