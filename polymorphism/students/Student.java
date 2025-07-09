@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 /**
  * The {@code Student} class represents a student with a name and a list of enrolled courses.
+ * It is an abstract class that provides a foundation for different types of students (e.g., undergraduate, graduate).
+ * Implements the {@code Searchable} interface to allow keyword-based matching and equality checks.
  */
 public abstract class Student {
     
@@ -11,6 +13,10 @@ public abstract class Student {
     /** A list of courses the student is enrolled in. */
     private ArrayList<Course> courses;
     
+    
+    /**
+     * Constructs a Student object with a default name "unknown".
+     */
     public Student() {
         this("unknown");
     }
