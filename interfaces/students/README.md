@@ -12,3 +12,5 @@ To test the application, we started organizing our code into the following:
 
 ## Compiling the Project
 The `.class` files indicate that these files were not modified, but they are necessary for the project to compile. You can simply copy and paste them into the same directory to compile the project. Alternatively, if needed, you can retrieve the corresponding `.java` files from a previous version.
+
+**Note:** The files `CourseList.class` and `StudentList.class` are intentionally not included. Can you think about why that might be?
