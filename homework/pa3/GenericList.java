@@ -1,64 +1,73 @@
 import java.util.Arrays;
 
 /**
- * An abstract list class that stores objects implementing the Searchable interface.
- * Provides basic functionality such as adding, retrieving, and checking size.
- * Prevents duplicate entries and dynamically resizes the internal array as needed.
+ * A generic list class that stores objects implementing the {@link Searchable} interface.
+ * <p>
+ * This class provides basic list functionalities such as adding elements, retrieving by index,
+ * checking the size, and sorting. It prevents duplicate entries by checking for existing elements
+ * before adding and dynamically resizes the internal storage array as needed.
+ * </p>
+ *
+ * <p>
+ * Internally, elements are stored in an {@code Object[]} array for generic compatibility.
+ * Elements are cast to type {@code T} upon retrieval or processing.
+ * </p>
+ *
+ * @param <T> the type of elements stored in the list, which must implement {@link Searchable} for type {@code T}
  */
  
 public class GenericList<T extends Searchable<T>> {
 
     /**
-     * Internal array used to store list elements.
+     * Internal array used to store list elements as {@code Object[]} due to Java generics limitations.
      */
-    protected Searchable[] internalList;
+    private Object[] internalList;
     
     /**
      * Current number of elements in the list.
      */
-    protected int size;
+    private int size;
     
     /**
      * Current capacity of the internal array.
      */
-    protected int capacity;
+    private int capacity;
     
     
     /**
-     * Constructs a GenericList with a default initial capacity of 10.
+     * Constructs a {@code GenericList} with a default initial capacity of 10.
      */
     public GenericList() {
         this(10);
     }
 
     /**
-     * Constructs a GenericList with a specified initial capacity.
+     * Constructs a {@code GenericList} with a specified initial capacity.
      *
      * @param capacity the initial capacity of the internal array
      */
     public GenericList(int capacity) {
-        // this will compile but we need to be careful
-        this.internalList = new Searchable[capacity];
+        this.internalList = new Object[capacity];
         this.size = 0;
         this.capacity = capacity;
     }
     
     /**
-     * Adds a new object to the list if it is not already present.
-     * Only allows objects that implement the Searchable interface.
-     * Automatically grows the internal list if capacity is exceeded.
+     * Adds a new element to the list if it is not already present.
+     * <p>
+     * This method throws {@link IllegalArgumentException} if the element does not implement {@link Searchable}.
+     * If the internal array capacity is exceeded, the list automatically grows.
+     * Duplicate elements (determined by {@link Searchable#isEqual(Object)}) are not added.
+     * </p>
      *
-     * @param obj the object to add
-     * @throws IllegalArgumentException if the object does not implement Searchable
+     * @param obj the element to add
+     * @throws IllegalArgumentException if {@code obj} does not implement {@link Searchable}
      */
+    @SuppressWarnings("unchecked")
     public void add(T obj) {
         // only add searchable objects
         if(!(obj instanceof Searchable))
             throw new IllegalArgumentException("Object must implement Searchable");
-            
-        // only add instance of T
-        if(!(obj instanceof T))
-            throw new IllegalArgumentException("Object is not valid");
             
         // check if it is already in the list
         // do not add it anymore
@@ -71,20 +80,21 @@ public class GenericList<T extends Searchable<T>> {
     }
     
     /**
-     * Retrieves the object at the specified index.
+     * Retrieves the element at the specified index.
      *
-     * @param index the index of the object
-     * @return the object at the specified position
-     * @throws ArrayIndexOutOfBoundsException if the index is invalid
+     * @param index the zero-based index of the element to retrieve
+     * @return the element at the specified index
+     * @throws ArrayIndexOutOfBoundsException if the index is out of range (index &lt; 0 || index &gt;= size)
      */
+    @SuppressWarnings("unchecked")
     public T get(int index) {
         return (T) this.internalList[index];
     }
     
     /**
-     * Returns the current number of elements in the list.
+     * Returns the number of elements currently stored in the list.
      *
-     * @return the size of the list
+     * @return the current size of the list
      */
     public int size() {
         return this.size;
@@ -92,11 +102,12 @@ public class GenericList<T extends Searchable<T>> {
     
     /**
      * Doubles the capacity of the internal array and copies over existing elements.
+     * This method is called automatically when the list capacity is exceeded.
      */
     private void growList() {
         // grow the internal array
         this.capacity = this.capacity * 2;
-        Searchable[] newList = new Searchable[this.capacity];
+        Object[] newList = new Object[this.capacity];
         
         // copy old elements
         for(int i = 0; i < this.size; i++) {
@@ -107,52 +118,62 @@ public class GenericList<T extends Searchable<T>> {
     }
 
     /**
-     * Finds and returns the first object in the list that matches the given key.
-     * Implemented by subclasses based on specific matching logic.
+     * Finds and returns the first element in the list that matches the given key.
+     * <p>
+     * Matching is determined by the {@link Searchable#isMatch(String)} method.
+     * </p>
      *
-     * @param key the search key
-     * @return the matching object, or null if no match is found
+     * @param key the search key used to find a matching element
+     * @return the first matching element, or {@code null} if no match is found
      */
+    @SuppressWarnings("unchecked")
     public T findMatch(String key) {
-        for(Searchable c : this.internalList) {
+        for(Object ob : this.internalList) {
+            T c = (T)ob;
             if(c != null && c.isMatch(key))
-                return (T)c;
+                return c;
         }
         
         return null;
     }
     
     /**
-     * Returns a new list containing all objects that match the given key.
-     * Implemented by subclasses with their specific type and match logic.
+     * Returns a new {@code GenericList} containing all elements that match the given key.
+     * <p>
+     * Matching is determined by the {@link Searchable#isMatch(String)} method.
+     * </p>
      *
-     * @param key the search key
-     * @return a BaseList containing all matching elements
+     * @param key the search key used to find matching elements
+     * @return a {@code GenericList} containing all matching elements; may be empty if no matches found
      */
+    @SuppressWarnings("unchecked")
     public GenericList<T> query(String key) {
         GenericList<T> result = new GenericList<>();
         
-        for(Searchable s : internalList) {
-            Searchable tmp = s;
+        for(Object s : internalList) {
+            T tmp = (T)s;
             
             if(tmp != null && tmp.isMatch(key))
-                result.add((T)tmp);
+                result.add(tmp);
         }
         
         return result;
     }
     
     /**
-     * Determines whether the specified object is already in the list.
-     * Implemented by subclasses using their equality logic.
+     * Determines whether the specified element exists in the list.
+     * <p>
+     * Equality is determined by the {@link Searchable#isEqual(Object)} method.
+     * </p>
      *
-     * @param obj the object to check for
-     * @return true if the object exists in the list; false otherwise
+     * @param obj the element to check for containment
+     * @return {@code true} if the element exists in the list; {@code false} otherwise
      */
+    @SuppressWarnings("unchecked")
     public boolean contains(T obj) {
         T c = obj;
         
-        for(Searchable s : internalList) {
+        for(Object s : internalList) {
             T tmp =(T)s;
             
             if(tmp != null && tmp.isEqual(c))
@@ -163,16 +184,16 @@ public class GenericList<T extends Searchable<T>> {
     }
     
     /**
-     * Sorts the elements in this list in ascending order according to their natural ordering.
+     * Sorts the elements in the list in ascending order according to their natural ordering.
      * <p>
      * This method uses {@link Arrays#sort(Object[], int, int)} to sort the internal array
      * from index {@code 0} (inclusive) to {@code size} (exclusive).
      * </p>
      *
-     * <p>All elements in the list must implement {@link Comparable} and must be mutually comparable,
+     * <p>All elements must implement {@link Comparable} and be mutually comparable,
      * otherwise a {@link ClassCastException} will be thrown at runtime.</p>
      *
-     * @throws ClassCastException if the list contains elements that are not mutually comparable
+     * @throws ClassCastException if elements are not mutually comparable
      */
     public void sort() {
         Arrays.sort( this.internalList, 0, this.size );
