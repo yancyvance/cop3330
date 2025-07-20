@@ -5,7 +5,7 @@ public class CourseListModel extends GenericListModel {
         "Code", "Title", "Credit"
     };
     
-    public CourseListModel(GenericList list) {
+    public CourseListModel(GenericList<Course> list) {
         super(list);
     }
 

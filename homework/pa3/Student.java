@@ -267,10 +267,10 @@ public abstract class Student implements Comparable, Searchable<Student> {
     }
     
     /**
-     * Returns a CourseList object containing all the student's enrolled courses.
-     * A new CourseList is constructed and populated with the student's courses.
+     * Returns a GenericList object containing all the student's enrolled courses.
+     * A new GenericList is constructed and populated with the student's courses.
      *
-     * @return a CourseList of the student's courses
+     * @return a GenericList of the student's courses
      */
     public GenericList<Course> getCourseList() {
         GenericList<Course> list = new GenericList<>();

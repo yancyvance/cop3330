@@ -266,6 +266,14 @@ public class SimpleController {
         this.students.add( s );
     }
     
+    public GenericList<Student> getStudentList() {
+        return this.students;
+    }
+    
+    public GenericList<Course> getCourseList() {
+        return this.courses;
+    }
+    
     
     // advanced topic, no need to read beyond this point
     public StudentListModel getStudentListModel() {
@@ -282,15 +290,6 @@ public class SimpleController {
     
     public CourseListModel getCourseListModel(Student s) {
         return new CourseListModel( s.getCourseList() );
-    }
-    
-    public GenericList<Student> getStudentList() {
-        return this.students;
-    }
-    
-    public GenericList<Course> getCourseList() {
-        return this.courses;
-    }
-    
+    }    
         
 }

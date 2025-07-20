@@ -5,7 +5,7 @@ public class StudentListModel extends GenericListModel {
         "ID", "Name", "Type", "Total Credit Hours", "Tuition Due"
     };
     
-    public StudentListModel(GenericList list) {
+    public StudentListModel(GenericList<Student> list) {
         super(list);
     }
     

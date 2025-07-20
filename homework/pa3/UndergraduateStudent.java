@@ -23,6 +23,13 @@ public class UndergraduateStudent extends Student {
         super(name);
     }
     
+    /**
+     * Constructs a new UndergraduateStudent object with the specified ID and name.
+     * Initializes an empty course list.
+     *
+     * @param studentID the ID of the student
+     * @param name the name of the student
+     */
     public UndergraduateStudent(String studentID, String name) {
         super(studentID, name);
     }
