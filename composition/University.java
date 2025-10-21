@@ -26,6 +26,7 @@ public class University {
             this.addStudent( new Student(s) );
         }
         
+        /*
         for( int i = 0; i < ob.students.size(); i++) {
             Student tmp = ob.students.get(i);
             Student newStud = new Student(tmp);
@@ -33,7 +34,7 @@ public class University {
             
             //this.addStudent( new Student( ob.students.get(i) ) );
         }
-        
+        */
     }
     
     public void addStudent(Student s) {
