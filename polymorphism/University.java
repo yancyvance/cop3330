@@ -90,14 +90,14 @@ public class University {
             // the appropriate object
             Student s = Student.createStudent(type, name);
             
-            // if grad student, then extract thesis topic
+            // is this a graduate student object?
             if( s instanceof GraduateStudent ) {
                 String topic = info;
 
                 // downcasting; Student reference variable s to GraduateStudent
                 ( (GraduateStudent) s).setThesisTopic( topic );
             }
-            // otherwise, extract year level
+            // is this an undergraduate student object?
             else if( s instanceof UndergraduateStudent ) {
                 int yearLevel = Integer.parseInt( info.trim() );
                 
