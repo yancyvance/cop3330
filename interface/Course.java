@@ -68,6 +68,6 @@ public class Course implements Comparable<Course>, Searchable {
     public boolean matchesExact(String key) {
         
         return this.getCode().toLowerCase().equals( key.toLowerCase() ) ||
-            this.getTitle().toLowerCase().equals( key.toLowerCase() );
+            this.getTitle().toLowerCase().equals( key.toLowerCase() );      // added after the lecture
     }
 }
