@@ -1,0 +1,10 @@
+2
+John Doe
+Graduate Large-Language Models
+2
+COP3330 3 Object-Oriented Programming
+COP3502 3 Computer Science I
+Jane Smith
+Undergraduate 1
+1
+COP3330 3 Object-Oriented Programming
