@@ -287,12 +287,15 @@ public class StudentListUI {
     }
     
     private void saveData(ActionEvent e) {
-        /*
-        if( this.controller.saveData() )
-            JOptionPane.showMessageDialog(this.frame, "All changes have been saved.");
-        else
-            JOptionPane.showMessageDialog(this.frame, "There is an error saving the data.");
-        */
+        try {
+            if( this.controller.saveData() )
+                JOptionPane.showMessageDialog(this.frame, "All changes have been saved.");
+            else
+                JOptionPane.showMessageDialog(this.frame, "There is an error saving the data.");
+        }
+        catch( Exception ex ) {
+            
+        }
     }
 
 }

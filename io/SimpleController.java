@@ -1,14 +1,35 @@
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 
 public class SimpleController {
+    
+    // constants needed for file reading and writing
+    private static final String STUDENTS_FILE = "students.csv";
+    private static final String COURSES_FILE = "courses.csv";
+    private static final String ENROLLMENTS_FILE = "enrollments.csv";
+    
+    private static final String[] STUDENTS_HEADER = {
+        "StudentID", "StudentName", "Status", "ThesisTopic", "YearLevel"
+    };
+    private static final String[] COURSES_HEADER = {
+        "Code", "Title", "Credit"
+    };
+    private static final String[] ENROLLMENTS_HEADER = {
+        "StudentID", "Code"
+    };
     
     private University university;
     
     public SimpleController() throws FileNotFoundException {
         this.university = new University();
         
+        // load all data
+        this.loadData();
+    }
+    
+    public void loadData() throws FileNotFoundException {
         // populate the containers
         this.loadStudents();
         this.loadCourses();
@@ -16,7 +37,7 @@ public class SimpleController {
     }
     
     public void loadStudents() throws FileNotFoundException {
-        Scanner in = new Scanner(new File("students.csv"));
+        Scanner in = new Scanner(new File(STUDENTS_FILE));
         
         // read the header
         in.nextLine();
@@ -56,6 +77,44 @@ public class SimpleController {
     }
     
     public void loadEnrollments() throws FileNotFoundException {
+        // TODO: Complete method
+        
+    }
+    
+    public boolean saveData() throws FileNotFoundException {
+        // save all data to files
+        this.saveStudentsAndEnrollments();
+        this.saveCourses();
+        
+        return true;      
+    }
+    
+    public void saveStudentsAndEnrollments() throws FileNotFoundException {
+        // TODO: Complete method
+        
+        PrintWriter sOut = new PrintWriter(STUDENTS_FILE);
+        
+        // write out the header
+        sOut.println( String.join(",", STUDENTS_HEADER) );
+        
+        // for every student
+        for( Student s : university.getStudents() ) {
+            sOut.printf("%s,%s,", s.getID(), s.getName());
+            
+            if( s instanceof GraduateStudent ) {
+                sOut.printf("%s,%s", "Graduate", ((GraduateStudent)s).getThesisTopic());
+            }
+            else if( s instanceof UndergraduateStudent ) {
+                sOut.printf("%s,,%d", "Undergraduate", ((UndergraduateStudent)s).getYearLevel());
+            }
+            
+            sOut.println();
+        }
+        
+        sOut.close();
+    }
+    
+    public void saveCourses() throws FileNotFoundException {
         // TODO: Complete method
         
     }
